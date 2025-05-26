@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import { StyleSheet } from 'react-native';
-import { Chrome as Home, Calendar, CirclePlus as PlusCircle, Users, Search, Settings } from 'lucide-react-native';
+import { Chrome as Home, Calendar, CirclePlus as PlusCircle, Users, Search, Settings, Info } from 'lucide-react-native';
 
 const TabBarIcon = ({ color, size, icon: Icon }: { color: string; size: number; icon: any }) => {
   return <Icon color={color} size={size} />;
@@ -65,6 +65,15 @@ export default function TabLayout() {
           headerTitle: 'App Settings',
         }}
       />
+      {/* Remove the following screen definition */}
+      {/* <Tabs.Screen
+        name="settings/about"
+        options={{
+          title: 'About Us',
+          headerTitle: 'About PHMOS',
+          href: null, // This hides the tab from the tab bar
+        }}
+      /> */}
     </Tabs>
   );
 }

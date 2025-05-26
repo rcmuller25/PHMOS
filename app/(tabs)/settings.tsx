@@ -3,11 +3,21 @@ import { View, Text, StyleSheet, Switch, ScrollView, Alert, TouchableOpacity } f
 import { useSettingsStore } from '../../stores/settingsStore';
 import { usePatientsStore } from '../../stores/patientsStore';
 import { useAppointmentsStore } from '../../stores/appointmentsStore';
+import { useNavigation } from '@react-navigation/native';
 import { SettingsSection } from '../../components/SettingsSection';
 import { SettingsItem } from '../../components/SettingsItem';
 import { Button } from '../../components/Button';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-export default function Settings() {
+type SettingsStackParamList = {
+  About: undefined;
+};
+
+interface SettingsScreenProps {
+  navigation: StackNavigationProp<SettingsStackParamList>;
+}
+
+export default function Settings({ navigation }: SettingsScreenProps) {
   const {
     offlineMode,
     toggleOfflineMode,
@@ -74,6 +84,14 @@ export default function Settings() {
         },
       ]
     );
+  };
+
+  // Remove this duplicate line:
+  // const navigation = useNavigation();
+  
+  // Add this new handler
+  const handleAboutPress = () => {
+    navigation.navigate('settings/about'); // Updated route name
   };
 
   return (
@@ -253,6 +271,12 @@ export default function Settings() {
         </Text>
       </SettingsSection>
       
+      <SettingsSection title="About">
+        <SettingsItem title="About Us" onPress={handleAboutPress}>
+          <Text style={styles.aboutLink}>Learn more about PHMOS</Text>
+        </SettingsItem>
+      </SettingsSection>
+      
       <View style={styles.versionContainer}>
         <Text style={styles.versionText}>Primary Healthcare Mobile Outreach System</Text>
         <Text style={styles.versionNumber}>Version 1.0.0</Text>
@@ -261,6 +285,7 @@ export default function Settings() {
   );
 }
 
+// Add this to your StyleSheet
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -333,5 +358,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#718096',
     marginTop: 4,
+  },
+  aboutLink: {
+    color: '#0077B6',
+    fontWeight: '500',
   },
 });
