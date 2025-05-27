@@ -1,12 +1,17 @@
 import { Tabs } from 'expo-router';
 import { StyleSheet } from 'react-native';
 import { Chrome as Home, Calendar, CirclePlus as PlusCircle, Users, Search, Settings, Info } from 'lucide-react-native';
+import { useProtectedRoute } from '../_layout';
 
 const TabBarIcon = ({ color, size, icon: Icon }: { color: string; size: number; icon: any }) => {
   return <Icon color={color} size={size} />;
 };
 
 export default function TabLayout() {
+  // This will redirect to login if not authenticated
+  const redirect = useProtectedRoute();
+  if (redirect) return redirect;
+  
   return (
     <Tabs
       screenOptions={{
@@ -17,6 +22,7 @@ export default function TabLayout() {
         headerStyle: styles.header,
         headerTitleStyle: styles.headerTitle,
       }}>
+      {/* Existing tab screens */}
       <Tabs.Screen
         name="home"
         options={{

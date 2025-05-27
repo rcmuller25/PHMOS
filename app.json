@@ -19,7 +19,8 @@
     "plugins": [
       "expo-router",
       "expo-font",
-      "expo-web-browser"
+      "expo-web-browser",
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
@@ -27,7 +28,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "4c610bf3-9ed6-430a-99c2-a91c1eb085e0"
+        "projectId": "420fbca4-a246-4d3b-be83-2d64eaadf5f6"
       }
     },
     "android": {

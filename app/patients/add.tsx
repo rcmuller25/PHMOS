@@ -10,12 +10,13 @@ import {
   Platform,
   Alert
 } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRouter, Stack } from 'expo-router';
-import { ChevronLeft, ChevronDown } from 'lucide-react-native';
+import { ChevronLeft } from 'lucide-react-native';
 import { usePatientsStore } from '../../stores/patientsStore';
 import { FormField } from '../../components/FormField';
 import { Button } from '../../components/Button';
-import { AppointmentPicker } from '../../components/AppointmentPicker';
+import { AppointmentPicker } from '@/components/AppointmentPicker';
 
 // ID Type options
 const ID_TYPES = ['ID Number', 'Passport Number'];
@@ -101,6 +102,14 @@ export default function AddPatient() {
     );
   };
 
+  // Handle date change from native picker
+  const onChangeDate = (_event: any, selectedDate?: Date) => {
+    setShowDatePicker(false);
+    if (selectedDate) {
+      setDateOfBirth(selectedDate.toISOString().split('T')[0]);
+    }
+  };
+
   return (
     <>
       <Stack.Screen 
@@ -150,7 +159,7 @@ export default function AddPatient() {
               <Text style={[styles.pickerText, !gender && styles.placeholderText]}>
                 {gender || 'Select gender'}
               </Text>
-              <ChevronDown color="#718096" size={20} />
+              <ChevronLeft color="#718096" size={20} style={{ transform: [{ rotate: '90deg' }] }} />
             </TouchableOpacity>
           </FormField>
           
@@ -163,7 +172,6 @@ export default function AddPatient() {
               <Text style={[styles.pickerText, !dateOfBirth && styles.placeholderText]}>
                 {dateOfBirth || 'Select date of birth'}
               </Text>
-              <ChevronDown color="#718096" size={20} />
             </TouchableOpacity>
           </FormField>
           
@@ -174,7 +182,7 @@ export default function AddPatient() {
               onPress={() => setShowIdTypePicker(true)}
             >
               <Text style={styles.pickerText}>{idType}</Text>
-              <ChevronDown color="#718096" size={20} />
+              <ChevronLeft color="#718096" size={20} style={{ transform: [{ rotate: '90deg' }] }} />
             </TouchableOpacity>
           </FormField>
           
@@ -258,93 +266,21 @@ export default function AddPatient() {
           }}
           onClose={() => setShowIdTypePicker(false)}
         />
-        
-        {/* Date Picker Modal */}
-        <AppointmentPicker
-          visible={showDatePicker}
-          title="Select Date of Birth"
-          data={[]} // This will be populated with dates in the real app
-          customContent={
-            <Calendar 
-              date={dateOfBirth ? new Date(dateOfBirth) : new Date()}
-              onSelect={(selectedDate) => {
-                setDateOfBirth(selectedDate.toISOString().split('T')[0]);
-                setShowDatePicker(false);
-              }}
-            />
-          }
-          onClose={() => setShowDatePicker(false)}
-        />
+
+        {/* Native Date Picker */}
+        {showDatePicker && (
+          <DateTimePicker
+            value={dateOfBirth ? new Date(dateOfBirth) : new Date()}
+            mode="date"
+            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+            maximumDate={new Date()}
+            onChange={onChangeDate}
+          />
+        )}
       </KeyboardAvoidingView>
     </>
   );
 }
-
-// Calendar component (simplified for this example)
-function Calendar({ date, onSelect }: { date: Date, onSelect: (date: Date) => void }) {
-  const [selectedDate, setSelectedDate] = useState(date);
-  
-  // In a real app, this would be a full calendar component
-  // For simplicity, we're just showing a few date options
-  
-  const dateOptions = [
-    new Date(2000, 0, 1),  // Jan 1, 2000
-    new Date(1995, 5, 15), // Jun 15, 1995
-    new Date(1990, 11, 31), // Dec 31, 1990
-    new Date(1985, 3, 10), // Apr 10, 1985
-    new Date(1980, 7, 22), // Aug 22, 1980
-  ];
-  
-  return (
-    <View style={calendarStyles.container}>
-      {dateOptions.map((dateOption, index) => (
-        <TouchableOpacity
-          key={index}
-          style={[
-            calendarStyles.dateButton,
-            selectedDate.toDateString() === dateOption.toDateString() && calendarStyles.selectedDate,
-          ]}
-          onPress={() => {
-            setSelectedDate(dateOption);
-            onSelect(dateOption);
-          }}
-        >
-          <Text
-            style={[
-              calendarStyles.dateText,
-              selectedDate.toDateString() === dateOption.toDateString() && calendarStyles.selectedDateText,
-            ]}
-          >
-            {dateOption.toLocaleDateString('en-ZA')}
-          </Text>
-        </TouchableOpacity>
-      ))}
-    </View>
-  );
-}
-
-const calendarStyles = StyleSheet.create({
-  container: {
-    padding: 16,
-  },
-  dateButton: {
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 4,
-    marginBottom: 8,
-    backgroundColor: '#F1F5F9',
-  },
-  selectedDate: {
-    backgroundColor: '#0077B6',
-  },
-  dateText: {
-    fontSize: 16,
-    color: '#2D3748',
-  },
-  selectedDateText: {
-    color: '#FFFFFF',
-  },
-});
 
 const styles = StyleSheet.create({
   container: {
