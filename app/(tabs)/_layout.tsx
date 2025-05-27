@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import { StyleSheet } from 'react-native';
-import { Chrome as Home, Calendar, CirclePlus as PlusCircle, Users, Search, Settings, Info } from 'lucide-react-native';
+import { Chrome as Home, Calendar, CirclePlus as PlusCircle, Users, Settings } from 'lucide-react-native';
 import { useProtectedRoute } from '../_layout';
 
 const TabBarIcon = ({ color, size, icon: Icon }: { color: string; size: number; icon: any }) => {
@@ -22,7 +22,6 @@ export default function TabLayout() {
         headerStyle: styles.header,
         headerTitleStyle: styles.headerTitle,
       }}>
-      {/* Existing tab screens */}
       <Tabs.Screen
         name="home"
         options={{
@@ -56,14 +55,6 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="search"
-        options={{
-          title: 'Search',
-          tabBarIcon: ({ color, size }) => <TabBarIcon icon={Search} color={color} size={size} />,
-          headerTitle: 'Search Records',
-        }}
-      />
-      <Tabs.Screen
         name="settings"
         options={{
           title: 'Settings',
@@ -71,15 +62,6 @@ export default function TabLayout() {
           headerTitle: 'App Settings',
         }}
       />
-      {/* Remove the following screen definition */}
-      {/* <Tabs.Screen
-        name="settings/about"
-        options={{
-          title: 'About Us',
-          headerTitle: 'About PHMOS',
-          href: null, // This hides the tab from the tab bar
-        }}
-      /> */}
     </Tabs>
   );
 }
