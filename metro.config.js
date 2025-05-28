@@ -8,4 +8,17 @@ const config = getDefaultConfig(__dirname);
 config.resolver.sourceExts.push('cjs');
 config.resolver.assetExts = ['ttf', 'woff', 'woff2', 'eot', 'svg', 'png', 'jpg', 'jpeg', 'gif', 'ico'];
 
+// Configure transformer to handle ES modules
+config.transformer = {
+  ...config.transformer,
+  getTransformOptions: async () => ({
+    transform: {
+      experimentalImportSupport: false,
+      inlineRequires: false,
+    },
+    preloadedModules: false,
+    sourceType: 'module',
+  }),
+};
+
 module.exports = config;
